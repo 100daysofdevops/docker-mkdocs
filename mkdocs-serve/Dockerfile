@@ -1,13 +1,5 @@
-FROM alpine:latest
-
-RUN \
-    apk add --update \
-        bash \
-        python2 \
-        python2-dev \
-        py-setuptools; \
-    easy_install-2.7 pip && \
-    pip install mkdocs
+# Use the exported container from mkdocs-produce.
+FROM mkdocs-container:imported
 
 ADD . /
 
@@ -17,4 +9,4 @@ WORKDIR /
 
 EXPOSE 8000
 
-ENTRYPOINT ["/bin/sh", "/bootstrap.sh"]
+ENTRYPOINT ["/bootstrap.sh"]

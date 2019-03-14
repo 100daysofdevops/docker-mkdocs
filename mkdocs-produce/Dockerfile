@@ -1,5 +1,7 @@
 FROM alpine:latest
 
+ADD . /
+
 RUN \
     apk add --update \
         bash \
@@ -7,16 +9,11 @@ RUN \
         python2-dev \
         py-setuptools; \
     easy_install-2.7 pip && \
-    pip install mkdocs
-
-ADD . /
-
-# RUN chmod +x /bootstrap.sh
+    pip install mkdocs \
+    chmod +x /bootstrap.sh
 
 WORKDIR /
 
 EXPOSE 8000
 
-ENTRYPOINT ["/bin/bash", "/bootstrap.sh"]
-# RUN ["/bin/bash", "/bootstrap.sh"]
-# RUN chmod +x /bootstrap.sh
+ENTRYPOINT ["/bootstrap.sh"]
