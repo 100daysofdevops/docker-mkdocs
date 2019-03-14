@@ -9,12 +9,14 @@ RUN \
     easy_install-2.7 pip && \
     pip install mkdocs
 
-COPY / /
+ADD . /
 
-RUN chmod +x /mkdockerize.sh
+# RUN chmod +x /bootstrap.sh
 
 WORKDIR /
 
 EXPOSE 8000
 
-ENTRYPOINT ["/mkdockerize.sh"]
+ENTRYPOINT ["/bin/bash", "/bootstrap.sh"]
+# RUN ["/bin/bash", "/bootstrap.sh"]
+# RUN chmod +x /bootstrap.sh
