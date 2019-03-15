@@ -1,7 +1,7 @@
 pipeline {
     agent {
         docker {
-            image 'python:2.7'
+            image ''
         }
     }
 
@@ -9,19 +9,18 @@ pipeline {
         stage('build') {
             steps {
                 echo 'Building...'
-                sh('./mkdockerize.sh mkdocs')
-            }
-        }
-
-        stage('test') {
-            steps {
-                echo 'Testing...'
-                sh('curl http://localhost:8000 | grep '200 OK'')
-            }
-            steps {
-                echo 'Closing the build...'
-                sh('kill $(ps aux | grep '[d]ocker run' | awk '{print $2}')')
+                sh label: '', script: '''cp -rf mkdocs mkdocs-produce/mkdocs/
+                                         cd mkdocs-produce/
+                                         docker build -t daduang/mkdocs-produce .
+                                         docker container create --name mkdocs-container daduang/mkdocs-produce
+                                         docker container export mkdocs-container | gzip > ../mkdocs-serve/mkdocs.tar.gz
+                                         docker container rm mkdocs-container
+                                         cd ../mkdocs-serve/
+                                         docker import mkdocs.tar.gz mkdocs-container:imported
+                                         docker build -t daduang/mkdocs-serve .
+                                         '''
             }
         }
     }
 }
+Browser Connected: http://localhost:8000/
