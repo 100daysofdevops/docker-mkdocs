@@ -5,7 +5,7 @@ ADD . /
 
 RUN chmod +x /bootstrap.sh
 
-WORKDIR /
+WORKDIR /mkdocs/
 
 EXPOSE 8000
 

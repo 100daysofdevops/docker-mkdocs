@@ -15,12 +15,15 @@ before_script:
 after_script:
   - echo "After script section"
   - echo "For example you might do some cleanup here"
+  - rm -rf mkdocs-produce/mkdocs/
+  - rm mkdocs-serve/mkdocs.tar.gz
 
 build1:
   stage: build
   script:
     - echo "Do your build here"
-    - docker build -t daduang/mkdocs .
+    - docker build -t daduang/mkdocs-produce mkdocs-produce
+    - docker build -t daduang/mkdocs-serve mkdocs-server
 
 test1:
   stage: test

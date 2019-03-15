@@ -5,11 +5,7 @@
 set -x
 
 # Copy the pages into the mkdocs-produce directory before it is built.
-cp -rf docs/ mkdocs-produce/docs/
-
-# Move the mkdocs.yml file to the root of the mkdocs-produce directory. The
-# structure shown on the MKDocs documentation shows that mkdocs.yml is at the root.
-mv mkdocs-produce/docs/mkdocs.yml mkdocs-produce/mkdocs.yml
+cp -rf mkdocs/ mkdocs-produce/mkdocs/
 
 cd mkdocs-produce/
 
@@ -43,8 +39,8 @@ docker run -ti --rm -p 8000:8000 --name mkdocs-serve daduang/mkdocs-serve
 
 cd ..
 
-# Remove the .md pages, mkdocs.yml, and mkdocs.tar.gz from the mkdocs-produce and
-# mkdocs-serve directories to ensure a clean state every time this script is run.
-rm -rf mkdocs-produce/docs/
-rm mkdocs-produce/mkdocs.yml
+# To save on space and to ensure a clean state when this script is run, remove the
+# source resources copied over from mkdocs-produce and also the generated
+# mkdocs.tar.gz file from mkdocs-serve.
+rm -rf mkdocs-produce/mkdocs/
 rm mkdocs-serve/mkdocs.tar.gz
