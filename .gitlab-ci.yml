@@ -1,0 +1,47 @@
+image: alpine:latest
+
+variables:
+   DOCKER_HOST: tcp://docker:2375/
+   DOCKER_DRIVER: overlay2
+
+before_script:
+  - apk update
+  - apk add python-dev
+  - apk add py-pip
+  - apk add docker
+  - pip install mkdocs
+
+build:
+  stage: build
+  services:
+    - name: docker:dind
+      alias: produce
+  script:
+    - cp -rf mkdocs mkdocs-produce/mkdocs/
+    - cd mkdocs-produce/
+    - docker build -t daduang/mkdocs-produce .
+    - docker container create --name mkdocs-container daduang/mkdocs-produce
+    - docker container export mkdocs-container | gzip > ../mkdocs-serve/mkdocs.tar.gz
+    - docker container rm mkdocs-container
+    - cd ../mkdocs-serve/
+    - docker import mkdocs.tar.gz mkdocs-container:imported
+    - docker build -t daduang/mkdocs-serve .
+
+test:
+  stage: test
+  services:
+    - name: docker:dind
+      alias: serve
+  script:
+    - cp -rf mkdocs mkdocs-produce/mkdocs/
+    - cd mkdocs-produce/
+    - docker build -t daduang/mkdocs-produce .
+    - docker container create --name mkdocs-container daduang/mkdocs-produce
+    - docker container export mkdocs-container | gzip > ../mkdocs-serve/mkdocs.tar.gz
+    - docker container rm mkdocs-container
+    - cd ../mkdocs-serve/
+    - docker import mkdocs.tar.gz mkdocs-container:imported
+    - docker build -t daduang/mkdocs-serve .
+    - docker run -d --name mkdocs-serve daduang/mkdocs-serve
+    - sleep 5
+    - docker stop $(docker ps -a -q)
