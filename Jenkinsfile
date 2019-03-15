@@ -1,7 +1,7 @@
 pipeline {
     agent {
         docker {
-            image ''
+            image 'python:2.7'
         }
     }
 
@@ -23,4 +23,3 @@ pipeline {
         }
     }
 }
-Browser Connected: http://localhost:8000/
