@@ -4,8 +4,8 @@
 
 set -x
 
-# Copy the pages into the mkdocs-produce directory before it is built.
-cp -rf mkdocs/ mkdocs-produce/mkdocs/
+# Copy the passed-in directory into the mkdocs-produce directory before it is built.
+cp -rf $1 mkdocs-produce/mkdocs/
 
 cd mkdocs-produce/
 

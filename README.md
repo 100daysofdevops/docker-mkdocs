@@ -5,7 +5,6 @@ Two functions are split between mkdocs-produce, which reads the local directory 
 Inside mkdocs-produce and mkdocs-serve directories, there are Dockerfiles and bootstrap.sh files that set up and perform the objectives of reading and hosting a MkDocs project.
 
 In order for this project to run correctly, there are only a few steps.
-    1. Copy or move your mkdocs files into the mkdocs/ directory.
-    2. Run the mkdockerize.sh script.
-        a. chmod +x /mkdockerize.sh
-    3. Navigate to http://localhost:8000 to see the MkDocs-created website.
+    1. Run the mkdockerize.sh script passing in the directory of your mkdocs files as an argument
+        a. ./mkdockerize.sh <directory-of-mkdocs-files>
+    2. Navigate to http://localhost:8000 to see the MkDocs-created website.
